@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>AirTime</title>
+
+    <!-- META INFORMATION -->
+
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Gagan">
+
+    <!-- CSS & JS-->
+    <link rel="stylesheet" href="leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script type="text/javascript" src="jquery-1.8.2.min.js"></script>
+    <script type="text/javascript" src="jquery.popupoverlay.js"></script> <!-- http://dev.vast.com/jquery-popup-overlay/ -->
+	<script src="triangulr.js"></script>
+	
+</head>
+
+
+
+<body id="bodyID">
+    <main>
+
+        <button class="popup1_open" name="open1" style="visibility:hidden; display: none">Open popup 1</button>
+        <div id="popup1">
+            <p>Map selection for search?</p>
+            <button class="popup1_close" onclick="initialSettings(1, 1)">Manual</button>
+            <button class="popup1_close" onclick="initialSettings(1, 0)">Auto</button>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#popup1').popup({
+                    opacity: 0.5,
+                    transition: 'all 0.3s', 
+                    backgroundactive: true
+                });
+            });
+        </script>
+
+        <button class="popup2_open" name="open2" style="visibility:hidden; display: none">Open popup 2</button>
+        <div id="popup2">
+            <p>Area selection for UAVs?</p>
+            <button class="popup2_close" onclick="initialSettings(2, 1)">Manual</button>
+            <button class="popup2_close" onclick="initialSettings(2, 0)">Auto</button>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#popup2').popup({
+                    opacity: 0.5,
+                    transition: 'all 0.3s',
+                    backgroundactive: true
+                });
+            });
+        </script>
+
+        <button class="popup3_open" name="open3" style="visibility:hidden; display: none">Open popup 3</button>
+        <div id="popup3">
+            <p>Select points to create search area</p><p>Then press 'OK'</p>
+            <button class="popup3_close" onclick="initialSettings(3, 1)">OK</button>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#popup3').popup({
+                    opacity: 0.5,
+                    transition: 'all 0.3s',
+                    backgroundactive: true
+                });
+            });
+        </script>
+
+        <button class="popupCancelArea_open" name="popupCancelArea" style="visibility:hidden; display: none">popupCancelArea</button>
+        <div id="popupCancelArea">
+            <p>Want to change last selection?</p>
+            <button class="popupCancelArea_close" onclick="initialSettings(4, 1)">Yes</button>
+            <button class="popupCancelArea_close" onclick="initialSettings(4, 0)">No</button>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#popupCancelArea').popup({
+                    opacity: 0.5,
+                    transition: 'all 0.3s',
+                    backgroundactive: true
+                });
+            });
+        </script>
+
+        <button class="popup4_open" name="open4" style="visibility:hidden; display: none">Open popup 4</button>
+        <div id="popup4">
+            <p>Want to add another area?</p>    
+            <button class="popup4_close" onclick="initialSettings(5, 1)">Yes</button>
+            <button class="popup4_close" onclick="initialSettings(5, 0)">No</button>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#popup4').popup({
+                    opacity: 0.5,
+                    transition: 'all 0.3s',
+                    backgroundactive: true
+                });
+            });
+        </script>
+
+        <!-- Popup for Checklist -->
+        <button class="clPopup_open" name="clPopup_button" style="visibility:hidden; display: none">Open popup Clecklist</button>
+        <div id="clPopup">
+            <p id="blockForCl">
+                Enter <span style="color:rgb(149, 1, 1)">'Cabin pressure 1 2 5'</span>
+            <br><br>
+                Enter <span style="color:rgb(149, 1, 1)">'GPWS G/S mode Sys'</span>
+            <br><br>
+                Enter <span style="color:rgb(149, 1, 1)">'Anti Ice wings all'</span>
+            <br><br>
+                Enter <span style="color:rgb(149, 1, 1)">'Altimeter standard QNH'</span>
+            <br><br>
+                Enter <span style="color:rgb(149, 1, 1)">'Signs: Seat belt & No Smoking'</span>
+            </p>
+
+
+            <p style="color: rgb(3, 6, 185); font-size: 12px">Use &#x2B06 for capital letters <br> 'c' to clear</p>    
+            <button class="clPopup_close" name="clPopup_close" style="visibility:hidden; display: none"></button>
+        </div>
+        <script>
+            $(document).ready(function() {
+                // document.getElementById("blockForCl").innerHTML = document.getElementById("clPopup_button").innerHTML;
+                $('#clPopup').popup({
+                    vertical: 'top',
+                    opacity: 0.5,
+                    transition: 'all 0.3s', 
+                    backgroundactive: true,
+                    horizontal: 'left',
+                });
+            });
+        </script>
+
+        
+        <section>
+            <div id="map">
+            </div>
+        </section>
+
+    </main>
+
+    <script type="text/javascript" src="leaflet.js"></script>
+    <script type="text/javascript" src="leaflet.rotatedMarker.js"></script>
+    <script type="text/javascript" src="MovingMarker.js"></script>
+    <script type="text/javascript" src="script.js"></script>
+</body>
+</html>

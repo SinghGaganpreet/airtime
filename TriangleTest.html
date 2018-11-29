@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>AirTime</title>
+
+    <!-- META INFORMATION -->
+
+    <meta charset="UTF-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Gagan">
+
+    <!-- CSS & JS-->
+    
+	<script src="triangulr.js"></script>
+	
+</head>
+
+
+
+<body>
+    <div id="triangle" style=" width: 600px; height: 400px; visibility: hidden;"></div>
+    <div id="sample" style=" width: 50px; height: 50px; margin-top: 200px;"></div>
+    <div id="t2" style=" width: 600px; height: 600px; margin-top: 100px;"></div>
+    
+    <script>        
+        var flatUIclrs = ['1abc9c', '2ecc71', '3498db', '9b59b6', '34495e',	'f1c40f', 'e67e22', 'e74c3c', 'ecf0f1', '95a5a6'];
+        var counter = 0;
+        var colorToFind;
+        var firstTime = true;
+        var colorGenerator = function (path) {
+            //var colorSelected = flatUIclrs[path.counter % flatUIclrs.length];            
+            var colorSelected = flatUIclrs[Math.floor(Math.random() * flatUIclrs.length)];
+            if (firstTime){
+                colorToFind = colorSelected;
+                firstTime = false;
+            }
+            if (colorSelected == colorToFind)
+                counter++;
+            return '#' + colorSelected;
+
+        };
+
+        var getColor = function(){
+            return '#' +colorToFind;
+        }
+
+        document.getElementById('triangle').appendChild(new Triangulr(100, 100, 14, 5, colorGenerator));
+        document.getElementById('sample').appendChild(new Triangulr(40, 40, 20, 0, getColor));
+
+        document.getElementById('t2').innerHTML = document.getElementById('triangle').innerHTML;
+        
+    </script>
+
+            
+</body>
+</html>

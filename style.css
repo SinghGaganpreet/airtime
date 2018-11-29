@@ -1,0 +1,45 @@
+
+
+
+#map {
+	height: 100%;
+}
+
+h1 {
+	display: none;
+}
+
+html, body {
+	height: 100%;
+	margin: 0px;	
+}
+
+main {
+	height: 100%;
+}
+
+section {
+	height: 100%;
+}
+
+button {
+	width: 45%;
+	background-color: #8B0000;
+	color: white;
+	padding: 2px 2px 0px 2px;
+	margin: 0px 0;
+	border: none;
+	border-radius: 2px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #4CAF50;
+}	
+
+.dot {
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    display: inline-block;
+}

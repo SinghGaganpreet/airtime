@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Bar Chart</title>
+	<script src="charts/Chart.bundle.js"></script>
+	<script src="charts/utils.js"></script>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
+</head>
+
+<body>
+	<div style="margin:auto">
+		<div id="container" style="width: 45%; float: left">
+			<canvas id="canvas"></canvas>
+		</div>
+		<div id="container2" style="width: 45%; margin-left: 45%; border-left: 1px solid lightblue;">
+			<canvas id="canvasResponseTime"></canvas>
+		</div>
+		<hr>
+		<div id="container3" style="width: 40%; float: left;">
+			<canvas id="canvasChecklist"></canvas>
+		</div>
+		<div id="container4" style="width: 45%; margin-left: 45%; border-left: 1px solid lightblue;">
+				<canvas id="canvasAtcCommands"></canvas>
+			</div>
+	</div>
+	<!-- <div id="testDiv"></div> -->
+	<!-- <button id="randomizeData">Randomize Data</button>
+	<button id="addDataset">Add Dataset</button>
+	<button id="removeDataset">Remove Dataset</button>
+	<button id="addData">Add Data</button>
+	<button id="removeData">Remove Data</button> -->
+	<script>
+		var totalQuestions = localStorage["totalQuestions"];
+		var totalAnswered = localStorage["totalAnswered"];
+		var unAnswered = localStorage["unAnswered"];
+		var correctAnswered = localStorage["correctAnswered"];
+		var wrongAnswered = localStorage["wrongAnswered"];
+		var minResponseTime = localStorage["minResponseTime"];
+		var averageResponseTime = localStorage["averageResponseTime"];
+		var maxResponseTime = localStorage["maxResponseTime"];
+		var responseTimeVector = (localStorage["responseTimeVector"]).split(",");
+		var responseTimeLabels = [];
+		var atcCommandAnsweres = (localStorage["atcCommandAnswers"]).split(",");
+		var atcCommandLabels = [];
+		var checkListAchieved = localStorage["checkListAchieved"];
+		var checkListLastAnsweredTime = localStorage["checkListLastAnsweredTime"];
+
+		for (var i=1; i<=responseTimeVector.length; i++){
+			responseTimeLabels.push((i).toString());
+		}
+		for (var i=1; i<=atcCommandAnsweres.length; i++){
+			atcCommandLabels.push((i).toString());
+		}
+
+
+		// document.getElementById('testDiv').innerHTML = 'asa' + totalQuestions +',' +totalAnswered;
+
+
+		//var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+		var color = Chart.helpers.color;
+		// Chart for Number of popup responses and related things
+		var barChartData = {
+			labels: ['Questions', 'Answered', 'Unanswered', 'Correct', 'Wrong', 'Quickest', 'Average', 'Slowest'],
+			datasets: [{
+				label: 'Player',
+				backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+				borderColor: window.chartColors.red,
+				borderWidth: 1,
+				data: [
+					totalQuestions,
+					totalAnswered,
+					unAnswered,
+					correctAnswered,
+					wrongAnswered,
+					minResponseTime,
+					averageResponseTime,
+					maxResponseTime,
+					0	// This is just a hack, otherwise chart will not show few bars
+				]
+			 }
+			]
+
+		};
+		// Chart for Response time of each popup
+		var config = {
+			type: 'line',
+			data: {
+				labels: responseTimeLabels,
+				datasets: [{
+					label: 'Response Time',
+					fill: false,
+					borderDash: [5, 5],
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: responseTimeVector,
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Popup Response Time',
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Number of Popup Responses'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Time in sec'
+						}
+					}]
+				}
+			}
+		};
+		// Chart for Response of each ATC command
+		var atcCommandGraph = {
+			type: 'line',
+			data: {
+				labels: atcCommandLabels,
+				datasets: [{
+					label: 'Response 1/0',
+					fill: false,
+					borderDash: [5, 5],
+					backgroundColor: window.chartColors.red,
+					borderColor: window.chartColors.red,
+					data: atcCommandAnsweres,
+				}]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'ATC command Responses',
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+				scales: {
+					xAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Number of ATC Responses'
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Correct/Incorrect responses'
+						}
+					}]
+				}
+			}
+		};
+		// Chart for check list responses 
+		var checklistPieChart = {
+			type: 'pie',
+			data: {
+				datasets: [{
+					data: [
+						checkListAchieved,
+						100-checkListAchieved,
+					],
+					backgroundColor: [
+						window.chartColors.red,
+						window.chartColors.gray,
+					],
+					label: 'Dataset 1'
+				}],
+				labels: [
+					'In ' + (checkListLastAnsweredTime/60).toFixed(2).toString() + ' minutes, checklist achieved ' +checkListAchieved + '%',
+					'Unanswered checklist ' +100-checkListAchieved +'%'
+				]
+			},
+			options: {
+				responsive: true
+			}
+		};
+
+		// Define a plugin to provide data labels
+		Chart.plugins.register({
+			afterDatasetsDraw: function(chart) {
+				var ctx = chart.ctx;
+
+				chart.data.datasets.forEach(function(dataset, i) {
+					var meta = chart.getDatasetMeta(i);
+					if (!meta.hidden) {
+						meta.data.forEach(function(element, index) {
+							// Draw the text in black, with the specified font
+							ctx.fillStyle = 'rgb(0, 0, 0)';
+
+							var fontSize = 16;
+							var fontStyle = 'normal';
+							var fontFamily = 'Helvetica Neue';
+							ctx.font = Chart.helpers.fontString(fontSize, fontStyle, fontFamily);
+
+							// Just naively convert to string for now
+							var dataString = dataset.data[index].toString();
+
+							// Make sure alignment settings are correct
+							ctx.textAlign = 'center';
+							ctx.textBaseline = 'middle';
+
+							var padding = 5;
+							var position = element.tooltipPosition();
+							ctx.fillText(dataString, position.x, position.y - (fontSize / 2) - padding);
+						});
+					}
+				});
+			}
+		});
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myBar = new Chart(ctx, {
+				type: 'bar',
+				data: barChartData,
+				options: {
+					responsive: true,
+					legend: {
+						position: 'top',
+					},
+					title: {
+						display: true,
+						text: 'Play Statistics'
+					}
+				}
+			});
+			
+			var ctx2 = document.getElementById('canvasResponseTime').getContext('2d');
+			window.myLine = new Chart(ctx2, config);
+
+			var ctx3 = document.getElementById('canvasChecklist').getContext('2d');
+			window.myPie = new Chart(ctx3, checklistPieChart);
+
+			var ctx4 = document.getElementById('canvasAtcCommands').getContext('2d');
+			window.myLine = new Chart(ctx4, atcCommandGraph);
+
+		};
+	</script>
+</body>
+
+</html>
