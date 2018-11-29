@@ -8,8 +8,8 @@ var map = new L.Map('map', {
 });
 
 // create a new tile layer
-var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//var tileUrl = 'Toulouse/map/{z}/{x}/{y}.png',
+//var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+var tileUrl = 'Toulouse/map/{z}/{x}/{y}.png',
 
 	layer = new L.TileLayer(tileUrl,
 		{
@@ -121,7 +121,7 @@ var atcCommandIntervalH = 24500;
 
 
 var initiateChecklist = true;
-var checkListStartTime = Date.now();
+var checkListStartTime;
 
 // var atcCommandDifficultyToggle = false;
 // var atcCommandDifficultyToggleTime = 300000;	// 60000 ms = 1 min
@@ -547,13 +547,13 @@ window.setInterval(function () {
 		speakThis("Big Hero.  Set.  Speed  " + speedV);
 		speakThis("  Heading  " + headingV);
 		speakThis("  Altitude  " + altitudeV);
-		speakThis("  Vertical Speed  +  " + vSpeedV);		
+		speakThis("  Vertical Speed  " + vSpeedV);		
 
 		// if(initiateChecklist){
 		// 	// document.getElementById("blockForCl").innerHTML = "Press E";
 		// 	document.getElementsByName("clPopup_button")[0].click();
 		// 	initiateChecklist = false;
-		// 	startTimeOfCheckList = Date.now();
+		// 	checkListStartTime = Date.now();
 		// }
 	}
 }, atcCommandIntervalL);
@@ -570,7 +570,7 @@ window.setInterval(function () {
 		speakThis("Big Hero.  Set.  Speed  " + speedV);
 		speakThis("  Heading  " + headingV);
 		speakThis("  Altitude  " + altitudeV);
-		speakThis("  Vertical Speed  +  " + vSpeedV);
+		speakThis("  Vertical Speed  " + vSpeedV);
 	}
 }, atcCommandIntervalTL);
 
@@ -586,7 +586,7 @@ window.setInterval(function () {
 		speakThis("Big Hero.  Set.  Speed  " + speedV);
 		speakThis("  Heading  " + headingV);
 		speakThis("  Altitude  " + altitudeV);
-		speakThis("  Vertical Speed  +  " + vSpeedV);
+		speakThis("  Vertical Speed " + vSpeedV);
 	}
 }, atcCommandIntervalTH);
 
@@ -601,12 +601,12 @@ window.setInterval(function () {
 		speakThis("Big Hero.  Set.  Speed  " + speedV);
 		speakThis("  Heading  " + headingV);
 		speakThis("  Altitude  " + altitudeV);
-		speakThis("  Vertical Speed  +  " + vSpeedV);
+		speakThis("  Vertical Speed  " + vSpeedV);
 
 		if(initiateChecklist){
 			document.getElementsByName("clPopup_button")[0].click();
 			initiateChecklist = false;
-			startTimeOfCheckList = Date.now();
+			checkListStartTime = Date.now();
 		}
 	}
 }, atcCommandIntervalH);
@@ -784,29 +784,54 @@ document.getElementById("bodyID").addEventListener("keypress", (event) => {
 	// alert(keyName);
 		
 	if (keyName == 'Enter'){ 
-		if (keyPressedString == 'Cabin pressure 1 2 5' ) {
+		if (keyPressedString == 'Cabin pressure' ) {
+			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 90%, green)";
+			checkListAchieved += 10;
+			checkListLastAnsweredTime = Date.now() - checkListStartTime;
+		}
+		else if (keyPressedString == 'mode Sys') {
 			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 80%, green)";
-			checkListAchieved += 20;
+			checkListAchieved += 10;
 			checkListLastAnsweredTime = Date.now() - checkListStartTime;
 		}
-		else if (keyPressedString == 'GPWS G/S mode Sys') {
+		else if (keyPressedString == 'GPWS G/S') {
+			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 70%, green)";
+			checkListAchieved += 10;
+			checkListLastAnsweredTime = Date.now() - checkListStartTime;
+		}
+		else if (keyPressedString == 'Anti Ice') {
 			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 60%, green)";
-			checkListAchieved += 20;
+			checkListAchieved += 10;
 			checkListLastAnsweredTime = Date.now() - checkListStartTime;
 		}
-		else if (keyPressedString == 'Anti Ice wings all') {
+		else if (keyPressedString == 'wings all') {
+			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 50%, green)";
+			checkListAchieved += 10;
+			checkListLastAnsweredTime = Date.now() - checkListStartTime;
+		}
+		else if (keyPressedString == 'Altimeter standard') {
 			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 40%, green)";
-			checkListAchieved += 20;
+			checkListAchieved += 10;
 			checkListLastAnsweredTime = Date.now() - checkListStartTime;
 		}
-		else if (keyPressedString == 'Altimeter standard QNH') {
+		else if (keyPressedString == 'QNH') {
+			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 30%, green)";
+			checkListAchieved += 10;
+			checkListLastAnsweredTime = Date.now() - checkListStartTime;
+		}
+		else if (keyPressedString == 'Signs:') {
 			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 20%, green)";
-			checkListAchieved += 20;
+			checkListAchieved += 10;
 			checkListLastAnsweredTime = Date.now() - checkListStartTime;
 		}
-		else if (keyPressedString == 'Signs: Seat belt & No Smoking') {
+		else if (keyPressedString == 'Seat belt') {
+			document.getElementById("clPopup").style.backgroundImage = "linear-gradient(white 10%, green)";
+			checkListAchieved += 10;
+			checkListLastAnsweredTime = Date.now() - checkListStartTime;
+		}
+		else if (keyPressedString == 'No Smoking') {
 			document.getElementsByName("clPopup_close")[0].click();
-			checkListAchieved += 20;
+			checkListAchieved += 10;
 			checkListLastAnsweredTime = Date.now() - checkListStartTime;
 		}
 		else if (keyPressedString == 'c' || keyPressedString.endsWith('c')) {
