@@ -8,8 +8,8 @@ var map = new L.Map('map', {
 });
 
 // create a new tile layer
-//var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-var tileUrl = 'Toulouse/map/{z}/{x}/{y}.png',
+var tileUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+//var tileUrl = 'Toulouse/map/{z}/{x}/{y}.png',
 
 	layer = new L.TileLayer(tileUrl,
 		{
